@@ -13,6 +13,7 @@ use crate::terminal::message;
 use super::directory_keys_values;
 use super::manifest::AssetManifest;
 
+// Hmm, can't find the logic here for when files are *originally* uploaded
 pub fn sync(
     target: &Target,
     user: &GlobalUser,
@@ -39,6 +40,7 @@ pub fn sync(
         }
     }
 
+    // The logic for which files to add or exclude has gotta be here, right?
     let (pairs, asset_manifest): (Vec<KeyValuePair>, AssetManifest) =
         directory_keys_values(target, path)?;
 

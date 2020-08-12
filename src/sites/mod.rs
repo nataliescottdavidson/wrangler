@@ -153,8 +153,10 @@ fn validate_key_size(key: &str) -> Result<(), failure::Error> {
 }
 
 const REQUIRED_IGNORE_FILES: &[&str] = &["node_modules"];
-const NODE_MODULES: &str = "node_modules";
+//const WELL_KNOWN_FILES: &[&str] = &[".well-known"];
 
+const NODE_MODULES: &str = "node_modules";
+// I think this is where the ignores happen
 fn get_dir_iterator(target: &Target, directory: &Path) -> Result<Walk, failure::Error> {
     // The directory provided should never be node_modules!
     if let Some(name) = directory.file_name() {
@@ -164,10 +166,11 @@ fn get_dir_iterator(target: &Target, directory: &Path) -> Result<Walk, failure::
     };
 
     let ignore = build_ignore(target, directory)?;
-    Ok(WalkBuilder::new(directory)
-        .git_ignore(false)
-        .overrides(ignore)
-        .build())
+    let builder = WalkBuilder::new(directory)
+    .git_ignore(false)
+    .overrides(ignore)
+    .build();
+    Ok(builder)
 }
 
 fn build_ignore(target: &Target, directory: &Path) -> Result<Override, failure::Error> {
@@ -177,6 +180,12 @@ fn build_ignore(target: &Target, directory: &Path) -> Result<Override, failure::
         required_override.add(&format!("!{}", ignored))?;
         log::info!("Ignoring {}", ignored);
     }
+    // This might create a whitelist which only uploads these files... we'll see lol
+    // it didn't even pick up the .well-known files, it just nuked the dir :(
+    //for included in WELL_KNOWN_FILES {
+    //    required_override.add(&included)?;
+    //    log::info!("Including {}", included);
+    //}
 
     if let Some(site) = &target.site {
         // If `include` present, use it and don't touch the `exclude` field
@@ -332,6 +341,8 @@ mod tests {
         fs::remove_dir_all(test_dir).unwrap();
     }
 
+    // Will we need to change this after allowing *some* hidden files?
+    // From this test it looks like that hidden files get ignored within get_dir_iterator
     #[test]
     fn it_can_ignore_hidden() {
         let mut site = Site::default();
