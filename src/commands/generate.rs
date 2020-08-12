@@ -53,6 +53,7 @@ pub fn generate(
 
 pub fn run_generate(name: &str, template: &str) -> Result<(), failure::Error> {
     let binary_path = install::install_cargo_generate()?;
+    
     let args = ["generate", "--git", template, "--name", name, "--force"];
 
     let command = command(binary_path, &args);
