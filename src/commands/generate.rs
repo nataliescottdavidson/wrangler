@@ -41,8 +41,6 @@ pub fn generate(
     let config_path = PathBuf::from("./").join(&name);
     // TODO: this is tightly coupled to our site template. Need to remove once
     // we refine our generate logic.
-
-    // What's going on here? Just setting the entrypoint as ./public?
     let generated_site = if site {
         Some(Site::new("./public"))
     } else {
@@ -55,7 +53,6 @@ pub fn generate(
 
 pub fn run_generate(name: &str, template: &str) -> Result<(), failure::Error> {
     let binary_path = install::install_cargo_generate()?;
-    // Does this run for every workers site- is every workers site from a template>
     let args = ["generate", "--git", template, "--name", name, "--force"];
 
     let command = command(binary_path, &args);

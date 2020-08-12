@@ -26,7 +26,6 @@ impl Target {
     pub fn build_dir(&self) -> Result<PathBuf, std::io::Error> {
         // if `site` is configured, we want to isolate worker code
         // and build artifacts away from static site application code.
-        // Where is that static site application code tho
         match &self.site {
             Some(site_config) => site_config.entry_point(),
             None => {

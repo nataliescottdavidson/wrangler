@@ -29,7 +29,7 @@ pub fn publish(
         warn_site_incompatible_route(&deploy_config);
 
         let site_namespace = sites::add_namespace(user, target, false)?;
-        // Assumption: we neeed to add the well known files to to_upload
+
         let (to_upload, to_delete, asset_manifest) =
             sites::sync(target, user, &site_namespace.id, &path)?;
 

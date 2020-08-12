@@ -11,7 +11,6 @@ const SITE_ENTRY_POINT: &str = "workers-site";
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Site {
-    // Ok, so where are the default included files?
     pub bucket: PathBuf,
     #[serde(rename = "entry-point")]
     entry_point: Option<PathBuf>,
@@ -39,7 +38,6 @@ impl Site {
         ))
     }
 
-    // I feel like this is where the files would be added to include
     pub fn scaffold_worker(&self) -> Result<(), failure::Error> {
         let entry_point = &self.entry_point()?;
         let template = "https://github.com/cloudflare/worker-sites-init";
