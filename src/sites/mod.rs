@@ -81,7 +81,6 @@ pub fn directory_keys_values(
 
             let set: regex::RegexSet = regex::RegexSet::new(&[
                 r"^.*(/\.(.)*)+(/.*)*$", // Hidden files
-                //r"^\.[^/].*$", // Hidden files at root
                 r"^.*\.well-known(/.*)*$", // Well-known
             ])?;
 
@@ -98,7 +97,7 @@ pub fn directory_keys_values(
                     if matches.matched(0) && !matches.matched(1) {
                         continue;
                     }
-                    file_list.push(path.as_os_str().to_str().unwrap().to_string());
+                    file_list.push(path.to_str().unwrap().to_string());
                     validate_file_size(&path)?;
 
                     let value = std::fs::read(path)?;
